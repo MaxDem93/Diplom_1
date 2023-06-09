@@ -1,10 +1,11 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+.DS_Store
 .idea/
 *.iml
 *.iws
-.build
-log/
-target/*
+.build/
+.target/
+!reportFolder/ReportFile.txt
 !target/site/jacoco/
