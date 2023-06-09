@@ -1,13 +1,12 @@
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import praktikum.Bun;
 import praktikum.Burger;
 import praktikum.Ingredient;
 import praktikum.IngredientType;
-
+import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -16,15 +15,17 @@ public class BurgerTest {
     Bun bun;
     @Mock
     Ingredient ingredient;
+    private Burger burger;
+
     @Test
     public void addIngredientTest() {
-        Burger burger = new Burger();
+        burger = new Burger();
         burger.addIngredient(ingredient);
         assertTrue(burger.ingredients.size() != 0);
     }
     @Test
     public void removeIngredientTest() {
-        Burger burger = new Burger();
+        burger = new Burger();
         burger.addIngredient(new Ingredient(IngredientType.SAUCE, "sour cream", 200));
         burger.addIngredient(new Ingredient(IngredientType.FILLING, "cutlet", 100));
         burger.removeIngredient(1);
@@ -32,7 +33,7 @@ public class BurgerTest {
     }
     @Test
     public void moveIngredientTest() {
-        Burger burger = new Burger();
+        burger = new Burger();
         burger.addIngredient(new Ingredient(IngredientType.SAUCE, "sour cream", 200));
         burger.addIngredient(new Ingredient(IngredientType.FILLING, "cutlet", 100));
         String ingredientsBefore = burger.ingredients.toString();
@@ -42,8 +43,8 @@ public class BurgerTest {
     }
     @Test
     public void getPriceTest() {
-        Burger burger = new Burger();
-        Mockito.when(bun.getPrice()).thenReturn(200F);
+        when(bun.getPrice()).thenReturn(200F);
+        burger = new Burger();
         burger.setBuns(bun);
         float expected = 400F;
         assertEquals("Wrong calculation", burger.getPrice(), expected, 0);
@@ -51,7 +52,7 @@ public class BurgerTest {
 
     @Test
     public void getReceipt() {
-        Burger burger = new Burger();
+        burger = new Burger();
         burger.addIngredient(new Ingredient(IngredientType.SAUCE, "sour cream", 200));
         burger.addIngredient(new Ingredient(IngredientType.FILLING, "cutlet", 100));
         Bun bun = new Bun("Булка", 100);
