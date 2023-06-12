@@ -2,10 +2,8 @@
 /shelf/
 /workspace.xml
 .DS_Store
-.idea/
 *.iml
 *.iws
-.build/
-.target/*
-!reportFolder/ReportFile.txt
-!target/site/jacoco/
+/.idea/
+/target/
+!/target/site/jacoco/
