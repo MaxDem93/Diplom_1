@@ -1,9 +1,4 @@
-# Default ignored files
-/shelf/
-/workspace.xml
 .DS_Store
-*.iml
-*.iws
 /.idea/
 /target/
 !/target/site/jacoco/
