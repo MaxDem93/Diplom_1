@@ -57,6 +57,17 @@
                             <goal>report</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>default-report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+
+                            <outputDirectory>${project.basedir}/jacoco</outputDirectory>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>
