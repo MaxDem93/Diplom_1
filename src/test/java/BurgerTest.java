@@ -1,63 +1,84 @@
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import praktikum.Bun;
 import praktikum.Burger;
 import praktikum.Ingredient;
 import praktikum.IngredientType;
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
+
 public class BurgerTest {
     @Mock
     Bun bun;
+    Burger burger;
+    Ingredient firstIngredient = Mockito.mock(Ingredient.class);
+    Ingredient secondIngredient = Mockito.mock(Ingredient.class);
+
     @Mock
-    Ingredient ingredient;
-    private Burger burger;
+    private Ingredient ingredientSause;
+
+    @Before
+    public void setUp() {
+        this.burger = new Burger();
+    }
+
+
+    @Test
+    public void checkSetBuns() {
+        this.burger.setBuns(this.bun);
+        Mockito.when(this.bun.getName()).thenReturn("black bun");
+        String actual = this.bun.getName();
+        assertEquals("Возвращается неверное имя булочки", "black bun", actual);
+    }
 
     @Test
     public void addIngredientTest() {
-        burger = new Burger();
-        burger.addIngredient(ingredient);
-        assertTrue(burger.ingredients.size() != 0);
+        this.burger.addIngredient(this.firstIngredient);
+        assertEquals("Неверное количество ингридиентов в бургере", 1, this.burger.ingredients.size());
     }
+
     @Test
     public void removeIngredientTest() {
-        burger = new Burger();
-        burger.addIngredient(new Ingredient(IngredientType.SAUCE, "sour cream", 200));
-        burger.addIngredient(new Ingredient(IngredientType.FILLING, "cutlet", 100));
-        burger.removeIngredient(1);
-        assertEquals(1, burger.ingredients.size());
+        this.burger.addIngredient(this.firstIngredient);
+        this.burger.removeIngredient(0);
+        Assert.assertTrue("Ингридиент не удален", this.burger.ingredients.isEmpty());
     }
+
     @Test
     public void moveIngredientTest() {
-        burger = new Burger();
-        burger.addIngredient(new Ingredient(IngredientType.SAUCE, "sour cream", 200));
-        burger.addIngredient(new Ingredient(IngredientType.FILLING, "cutlet", 100));
-        String ingredientsBefore = burger.ingredients.toString();
-        burger.moveIngredient(0, 1);
-        String ingredientsAfter = burger.ingredients.toString();
-        assertNotEquals(ingredientsAfter, ingredientsBefore);
-    }
-    @Test
-    public void getPriceTest() {
-        when(bun.getPrice()).thenReturn(200F);
-        burger = new Burger();
-        burger.setBuns(bun);
-        float expected = 400F;
-        assertEquals("Wrong calculation", burger.getPrice(), expected, 0);
+        this.burger.addIngredient(this.firstIngredient);
+        this.burger.addIngredient(this.secondIngredient);
+        this.burger.moveIngredient(0, 1);
+        assertEquals("Ингридиенты не поменялись местами", "secondIngredient", this.burger.ingredients.get(0).toString());
     }
 
     @Test
     public void getReceipt() {
-        burger = new Burger();
-        burger.addIngredient(new Ingredient(IngredientType.SAUCE, "sour cream", 200));
-        burger.addIngredient(new Ingredient(IngredientType.FILLING, "cutlet", 100));
-        Bun bun = new Bun("Булка", 100);
+        Bun bun = new Bun("Bun", 120.0F);
+        Ingredient sauce = new Ingredient(IngredientType.SAUCE, "Red", 50);
+        Ingredient filling = new Ingredient(IngredientType.FILLING, "cutlet", 10);
+        Burger burger = new Burger();
         burger.setBuns(bun);
-        String expectedReceipt = burger.getReceipt();
-        assertEquals(expectedReceipt, burger.getReceipt());
+        burger.addIngredient(sauce);
+        burger.addIngredient(filling);
+        String expectedString = "(==== Bun ====)\r\n= sauce Red =\r\n= filling cutlet =\r\n(==== Bun ====)\r\n\r\nPrice: 300,000000\r\n";
+        String actualReceipt = burger.getReceipt();
+        assertEquals("Ошибка", expectedString, actualReceipt);
+    }
+
+    @Test
+    public void getPriceTest() {
+        burger.setBuns(bun);
+        burger.addIngredient(ingredientSause);
+        float expectedPrice = bun.getPrice() * 2 + ingredientSause.getPrice();
+        float actualPrice = burger.getPrice();
+        assertEquals("Ошибка при подсчете цены бургера", expectedPrice, actualPrice, 0.01f);
     }
 }
